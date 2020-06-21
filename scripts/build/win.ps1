@@ -10,7 +10,7 @@ Param(
     [Alias("v")]
     [string]$devhubusername = 'YourDevhubUsernameAlias',
     [Alias("p")]
-    [string]$packageId = '0Ho0X000000KymASAS',
+    [string]$packageId = 'PackageId',
     [Alias("i")]
     [parameter(
         HelpMessage="Install only flag: Does not build a new package version and only installs the latest package version."

@@ -73,7 +73,7 @@ jobs:
           command: |
             mkdir -p ~/test-results/apex
             export SFDX_IMPROVED_CODE_COVERAGE="true"
-            sfdx force:apex:test:run -w 10 -r junit -d ~/test-results/apex -c
+            sfdx force:apex:test:run -u $USERNAME_STAGING -w 10 -r junit -d ~/test-results/apex -c
       - run:
           name: Clean Duplicate Test Results
           command: |
@@ -100,19 +100,19 @@ jobs:
           command: |
             sfdx force:package:version:create -p $PACKAGE_ID -v $USERNAME_PRODUCTION -w 60 -k $INSTALLATION_KEY -c
       - run:
-          name: Promote Latest Build
-          command: |
-            query=$(sfdx force:data:soql:query -t -q "SELECT SubscriberpackageVersionId FROM Package2Version WHERE Package2Id = '$PACKAGE_ID' ORDER BY CreatedDate DESC LIMIT 1" -u $USERNAME_PRODUCTION)
-            SUBSCRIBER_PACKAGE_VERSION_ID=$(echo $query | grep -o '04t[a-zA-Z0-9]*')
-            echo "Promoting latest package version: $SUBSCRIBER_PACKAGE_VERSION_ID ..."
-            sfdx force:package:version:promote -v $USERNAME_PRODUCTION -p $SUBSCRIBER_PACKAGE_VERSION_ID -n
-      - run:
           name: Install Package (Staging)
           command: |
             query=$(sfdx force:data:soql:query -t -q "SELECT SubscriberpackageVersionId FROM Package2Version WHERE Package2Id = '$PACKAGE_ID' ORDER BY CreatedDate DESC LIMIT 1" -u $USERNAME_PRODUCTION)
             SUBSCRIBER_PACKAGE_VERSION_ID=$(echo $query | grep -o '04t[a-zA-Z0-9]*')
             echo "Installing latest package version: $SUBSCRIBER_PACKAGE_VERSION_ID ..."
             sfdx force:package:install -w 10 -b 10 -u $USERNAME_STAGING -p $SUBSCRIBER_PACKAGE_VERSION_ID -k $INSTALLATION_KEY -r
+      - run:
+          name: Promote Latest Build
+          command: |
+            query=$(sfdx force:data:soql:query -t -q "SELECT SubscriberpackageVersionId FROM Package2Version WHERE Package2Id = '$PACKAGE_ID' ORDER BY CreatedDate DESC LIMIT 1" -u $USERNAME_PRODUCTION)
+            SUBSCRIBER_PACKAGE_VERSION_ID=$(echo $query | grep -o '04t[a-zA-Z0-9]*')
+            echo "Promoting latest package version: $SUBSCRIBER_PACKAGE_VERSION_ID ..."
+            sfdx force:package:version:promote -v $USERNAME_PRODUCTION -p $SUBSCRIBER_PACKAGE_VERSION_ID -n
       - run:
           name: Install Package (Production)
           command: |
@@ -125,7 +125,7 @@ jobs:
           command: |
             mkdir -p ~/test-results/apex
             export SFDX_IMPROVED_CODE_COVERAGE="true"
-            sfdx force:apex:test:run -w 10 -r junit -d ~/test-results/apex -c
+            sfdx force:apex:test:run -u $USERNAME_PRODUCTION -w 10 -r junit -d ~/test-results/apex -c
       - run:
           name: Clean Duplicate Test Results
           command: |

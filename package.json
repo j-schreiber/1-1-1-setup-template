@@ -1,0 +1,22 @@
+{
+  "name": "your-package-name",
+  "version": "1.0.0",
+  "description": "Your package description",
+  "main": "index.js",
+  "scripts": {
+    "prettier:format": "./node_modules/.bin/prettier --write '**/*.{trigger,cls,json,cmp,page,component,html,js}'",
+    "prettier:format:apex": "./node_modules/.bin/prettier --write '**/*.{trigger,cls}'",
+    "prettier:format:json": "./node_modules/.bin/prettier --write '**/*.json'",
+    "prettier:format:visualforce": "./node_modules/.bin/prettier --write '**/*.{cmp,page,component}'",
+    "prettier:format:lwc": "./node_modules/.bin/prettier --write '**/lwc/**/*.{html,js}'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/..."
+  },
+  "author": "Jannis Schreiber",
+  "devDependencies": {
+    "prettier": "^2.3.2",
+    "prettier-plugin-apex": "^1.10.0"
+  }
+}

@@ -8,7 +8,6 @@
 
 # VS Code
 **/jsconfig.json
-**/.vscode/
 
 # Logs
 logs
@@ -32,5 +31,5 @@ ehthumbs.db
 [Dd]esktop.ini
 $RECYCLE.BIN/
 
-# other untracked
-untracked/
+# project specific folders
+**untracked**

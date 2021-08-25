@@ -1,9 +1,9 @@
 #!bin/bash
 set -e
 
-alias=
+alias='YourPackageAlias'
 duration=7
-configFile=config/default-scratch-def.json
+configFile='config/default-scratch-def.json'
 devhubusername=
 
 while getopts a:d:f:v: option
@@ -16,24 +16,20 @@ do
     esac
 done
 
-if [ -z "$alias" ]; then
-    echo "Missing required parameter: Alias. Use '-a MyAlias'"
-    exit 1
+if [ -z "$INSTALLATION_KEY_ONE" ]; then 
+    echo 'Installation key for dependency not set. Export the key as environment variable with "export INSTALLATION_KEY_ONE=key" to avoid this prompt.'
+    read -p 'Enter installation key for the converter dependency: ' key
+    export INSTALLATION_KEY_ONE=$key
 fi
-if [ -z "$INSTALLATION_KEY_FIRSTDEP" ]; then 
-    echo 'Installation key for the converter dependency not set. Export key as environment variable with "export INSTALLATION_KEY_FIRSTDEP=key" to avoid this prompt.'
-    read -p 'Enter installation key for the converter dependency: ' firstDepKey
-    export INSTALLATION_KEY_FIRSTDEP=$firstDepKey
-fi
-if [ -z "$INSTALLATION_KEY_SECONDDEP" ]; then 
-    echo 'Installation key for the core dependency not set. Export key as environment variable with "export INSTALLATION_KEY_SECONDDEP=key" to avoid this prompt.'
-    read -p 'Enter installation key for the core dependency: ' secondDepKey
-    export INSTALLATION_KEY_SECONDDEP=$secondDepKey
+if [ -z "$INSTALLATION_KEY_TWO" ]; then 
+    echo 'Installation key for dependency not set. Export the key as environment variable with "export INSTALLATION_KEY_TWO=key" to avoid this prompt.'
+    read -p 'Enter installation key for the core dependency: ' key
+    export INSTALLATION_KEY_TWO=$key
 fi
 
-if [ -z "$INSTALLATION_KEY_SECONDDEP" ] || [ -z "$INSTALLATION_KEY_FIRSTDEP" ]
+if [ -z "$INSTALLATION_KEY_ONE" ] || [ -z "$INSTALLATION_KEY_TWO" ]
 then
-    echo "At least one installation key is empty. Exiting ..." >&2
+    echo "At least one installation key not setup. Exiting ..." >&2
     exit 1
 fi
 
@@ -48,20 +44,20 @@ else
     sfdx force:org:create -v $devhubusername -d $duration -f $configFile -a $alias -s
 fi
 
-echo "sfdx force:package:install -p \"First Dependency Package Version\" -u $alias -w 10 -k $INSTALLATION_KEY_FIRSTDEP"
-sfdx force:package:install -p "Second Dependency Package Version" -u $alias -w 10 -k $INSTALLATION_KEY_FIRSTDEP
+echo "sfdx force:package:install -p \"First Dependency Package Version\" -u $alias -w 10 -k $INSTALLATION_KEY_ONE"
+sfdx force:package:install -p "First Converter Dependency Package Version" -u $alias -w 10 -k $INSTALLATION_KEY_ONE
 
-echo "sfdx force:package:install -p \"Second Dependency Package Version\" -u $alias -w 10 -k $INSTALLATION_KEY_SECONDDEP"
-sfdx force:package:install -p "Second Dependency Package Version" -u $alias -w 10 -k $INSTALLATION_KEY_SECONDDEP
+echo "sfdx force:package:install -p \"Second Dependency Package Version\" -u $alias -w 10 -k $INSTALLATION_KEY_TWO"
+sfdx force:package:install -p "Second Dependency Package Version" -u $alias -w 10 -k $INSTALLATION_KEY_TWO
 
 echo "sfdx force:source:push -u $alias"
 sfdx force:source:push -u $alias
 
+echo "sfdx force:user:permset:assign -n Package_Developer_Permission_Set -u $alias"
+sfdx force:user:permset:assign -n Package_Developer_Permission_Set -u $alias
+
 echo "sfdx force:data:tree:import -p data/plans/standard-plan.json -u $alias"
 sfdx force:data:tree:import -p data/plans/standard-plan.json -u $alias
-
-echo "sfdx force:apex:execute -f scripts/apex/post-setup-script.apex -u $alias > /dev/null"
-sfdx force:apex:execute -f scripts/apex/post-setup-script.apex -u $alias > /dev/null
 
 echo "sfdx force:org:open -u $alias"
 sfdx force:org:open -u $alias

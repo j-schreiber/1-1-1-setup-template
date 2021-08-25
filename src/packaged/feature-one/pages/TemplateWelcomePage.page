@@ -1,5 +1,0 @@
-<apex:page controller="TemplateWelcomePageController">
-
-    <p>Nothing to see here, really!</p>
-
-</apex:page>

@@ -6,16 +6,16 @@
   "language": "en_US",
   "settings": {
     "lightningExperienceSettings": {
-        "enableS1DesktopEnabled": true
+      "enableS1DesktopEnabled": true
     },
     "pathAssistantSettings": {
-        "pathAssistantEnabled": true
+      "pathAssistantEnabled": true
     },
     "languageSettings": {
-        "enableTranslationWorkbench": true
+      "enableTranslationWorkbench": true
     },
     "chatterSettings": {
-        "enableChatter": true
+      "enableChatter": true
     },
     "quoteSettings": {
       "enableQuote": true

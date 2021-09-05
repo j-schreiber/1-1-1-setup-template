@@ -9,7 +9,7 @@
       }
     },
     {
-      "files": "**/*.{cls,trigger}",
+      "files": "**/*.{cls,trigger,apex}",
       "options": {
         "apexInsertFinalNewline": true,
         "printWidth": 140,

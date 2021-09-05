@@ -4,3 +4,6 @@
 
 .sfdx
 .localdevserver
+.*ignore
+*.*-meta.xml
+*.sh

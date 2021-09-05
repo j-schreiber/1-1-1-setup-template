@@ -1,32 +1,27 @@
 {
-    "trailingComma": "none",
-    "tabWidth": 4,
-    "printWidth": 100,
-    "overrides": [
-        {
-            "files": "**/lwc/**/*.html",
-            "options": {
-                "parser": "lwc"
-            }
-        },
-        {
-            "files": "**/*.{cls,trigger}",
-            "options": {
-                "apexInsertFinalNewline": true,
-                "printWidth": 200
-            }
-        },
-        {
-            "files": "*.{cmp,page,component}",
-            "options": {
-                "parser": "html"
-            }
-        },
-        {
-            "files": "*.{json,yml,yaml}",
-            "options": {
-                "tabWidth": 2
-            }
-        }
-    ]
+  "trailingComma": "none",
+  "overrides": [
+    {
+      "files": "**/lwc/**/*.html",
+      "options": {
+        "tabWidth": 4,
+        "parser": "lwc"
+      }
+    },
+    {
+      "files": "**/*.{cls,trigger}",
+      "options": {
+        "apexInsertFinalNewline": true,
+        "printWidth": 140,
+        "tabWidth": 4
+      }
+    },
+    {
+      "files": "*.{cmp,page,component}",
+      "options": {
+        "parser": "html",
+        "tabWidth": 4
+      }
+    }
+  ]
 }

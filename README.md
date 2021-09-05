@@ -3,34 +3,34 @@
 This is a demo repository that showcases the 1-1-1 setup, which I introduced on my blog [here](https://lietzau-consulting.de/2020/05/source-management-sfdx-part-1/).
 Cleanup checklist after using this template
 
--   modify scratch org definition file to your requirements
--   modify CI config to your likings
--   add more meaningful test data
--   rework `sfdx-project.json` (package name, dependencies, aliases, etc)
--   add npm dependencies (like newman, eslint, local dev server, etc)
--   remove demo source and replace with actual package contents.
--   modify setup script with your requirements (install dependencies, assign package permission sets, test data scripts, etc)
--   remove this section from README ;).
+- modify scratch org definition file to your requirements
+- modify CI config to your likings
+- add more meaningful test data
+- rework `sfdx-project.json` (package name, dependencies, aliases, etc)
+- add npm dependencies (like newman, eslint, local dev server, etc)
+- remove demo source and replace with actual package contents.
+- modify setup script with your requirements (install dependencies, assign package permission sets, test data scripts, etc)
+- remove this section from README ;).
 
 # Repository Structure
 
 The repository is meant to contain a single SFDX project. The SFDX project contains only a single 2nd gen package.
 Why? So we have better control over permissions and can easily replicate all scripts and folders. See my blog post for more details.
 
--   [config](config): contains scratch org definition files.
--   [data](data): test data for scratch org setup.
--   [scripts](scripts): anonymous apex and org setup scripts
--   [src](src): packaged source, unpackaged source and deployable source
--   [force-app](force-app): the default folder for sfdx CLI. Use as temporary target for source push/pull and organize to src.
+- [config](config): contains scratch org definition files.
+- [data](data): test data for scratch org setup.
+- [scripts](scripts): anonymous apex and org setup scripts
+- [src](src): packaged source, unpackaged source and deployable source
+- [force-app](force-app): the default folder for sfdx CLI. Use as temporary target for source push/pull and organize to src.
 
 ## Source Structure
 
 Source is organized in four sub directories. Sub-directories are handled differently during org setup, package build and deployment.
 
--   [packaged](src/packaged): Pushed to Scratch Org. Added to package contents. Deployed on persistent orgs with `force:package:install`.
--   [unpackaged](src/unpackaged): Pushed to Scratch Org. Not added to package contents. Not deployed on persistent orgs.
--   [deploy](src/deploy): Not pushed to Scratch Org. Not added to package contents. Deployed on persistent orgs with `force:source:deploy`.
--   [unpackaged-deploy](src/unpackaged-deploy): Pushed to Scratch Org. Not added to package contents. Deployed on persistent orgs with `force:source:deploy`
+- [packaged](src/packaged): Pushed to Scratch Org. Added to package contents. Deployed on persistent orgs with `force:package:install`.
+- [unpackaged](src/unpackaged): Pushed to Scratch Org. Not added to package contents. Not deployed on persistent orgs.
+- [deploy](src/deploy): Not pushed to Scratch Org. Not added to package contents. Deployed on persistent orgs with `force:source:deploy`.
+- [unpackaged-deploy](src/unpackaged-deploy): Pushed to Scratch Org. Not added to package contents. Deployed on persistent orgs with `force:source:deploy`
 
 ### Packaged
 

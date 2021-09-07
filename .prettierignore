@@ -7,3 +7,5 @@
 .*ignore
 *.*-meta.xml
 *.sh
+*.log
+documentation/**

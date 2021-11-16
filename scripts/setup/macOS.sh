@@ -16,6 +16,13 @@ do
     esac
 done
 
+KEYS=scripts/.config/keys.env
+if [ -f "$KEYS" ]; then
+    set -o allexport
+    source scripts/.config/keys.env
+    set +o allexport
+fi
+
 if [ -z "$INSTALLATION_KEY_ONE" ]; then 
     echo 'Installation key for dependency not set. Export the key as environment variable with "export INSTALLATION_KEY_ONE=key" to avoid this prompt.'
     read -p 'Enter installation key for the converter dependency: ' key
@@ -32,6 +39,9 @@ then
     echo "At least one installation key not setup. Exiting ..." >&2
     exit 1
 fi
+
+echo "npm ci"
+npm ci
 
 echo "mkdir -p force-app"
 mkdir -p force-app

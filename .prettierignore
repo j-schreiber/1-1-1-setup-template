@@ -9,3 +9,4 @@
 *.sh
 *.log
 documentation/**
+docs/**

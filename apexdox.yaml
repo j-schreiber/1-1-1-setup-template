@@ -1,0 +1,26 @@
+engine:
+  targetDirectory: "${workspaceFolder}/docs"
+
+  source:
+    - path: "${workspaceFolder}/src/packaged/main/services/classes"
+
+  excludes:
+    - "Test_*.cls"
+
+  title: "Documentation Title"
+
+  subtitle: "Subtitle for your documentation"
+
+  scope:
+    - global
+    - public
+    - protected
+    - webService
+    - testMethod
+
+  port: 8080
+
+  cleanDir: true
+
+docblock:
+  spacious: true

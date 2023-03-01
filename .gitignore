@@ -4,6 +4,7 @@
 
 # Salesforce cache
 .sfdx/
+.sf/
 .localdevserver/
 
 # VS Code
@@ -35,6 +36,7 @@ $RECYCLE.BIN/
 # other untracked
 untracked/
 test-results/
+docs/
 
 # sensitive data
 **/keys.env

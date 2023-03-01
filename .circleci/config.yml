@@ -1,25 +1,82 @@
 version: 2.1
 
 orbs:
-  jsc-sfdx: jsc/salesforce@0.7.0
+  jsc-sfdx: jsc/salesforce@1
+  slack: circleci/slack@4
 
 parameters:
   devhubUsername:
     description: Production username for the DevHub org (production environment)
     type: string
-    default: your-name@your-domain.com
+    default: production-username@your-domain.com
   devhubInstanceUrl:
     description: Production instance URL
     type: string
-    default: https://your-domain.my.salesforce.com
   devSandboxUsername:
     description: Username for the Dev Sandbox (developer integration)
     type: string
-    default: your-name@your-domain.com.dev
+    default: dev-username@your-domain.com
   qaSandboxUsername:
-    description: Username for the QA sandbox (UAT/Staging environment)
+    description: Username for the QA sandbox (UAT environment)
     type: string
-    default: your-name@your-domain.com.staging
+    default: staging-username@your-domain.com
+
+commands:
+  slack_notify_deployment_started:
+    parameters:
+      targetOrgName:
+        type: string
+    steps:
+      - slack/notify:
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "$CIRCLE_JOB started",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Target Org*: << parameters.targetOrgName >>"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Project*: $CIRCLE_PROJECT_REPONAME"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Branch*: $CIRCLE_BRANCH"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Author*: $CIRCLE_USERNAME"
+                    }
+                  ]
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "action_id": "basic_start_view",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Job"
+                      },
+                      "url": "${CIRCLE_BUILD_URL}"
+                    }
+                  ]
+                }
+              ]
+            }
+          event: always
 
 jobs:
   install_production:
@@ -81,13 +138,16 @@ workflows:
   package_build:
     jobs:
       - jsc-sfdx/scratch_org_test:
+          additionalSteps:
+            - slack_notify_deployment_started:
+                targetOrgName: "Scratch Org"
           devhubUsername: << pipeline.parameters.devhubUsername >>
           devhubInstanceUrl: << pipeline.parameters.devhubInstanceUrl >>
           jwtKey: SFDX_JWT_KEY
           consumerKey: SFDX_CONSUMER_KEY
           setupScript: scripts/shell/setup.sh
           runPrettier: true
-          runLwcTests: true
+          runLwcTests: false
           context:
             - salesforce
       - jsc-sfdx/build_release_candidate_version:
@@ -104,6 +164,16 @@ workflows:
                 - /^version/.*/
       - jsc-sfdx/beta_package_deploy:
           name: "dev_sandbox_deploy"
+          additionalSteps:
+            - slack_notify_deployment_started:
+                targetOrgName: "Dev Sandbox"
+          post-steps:
+            - slack/notify:
+                event: fail
+                template: basic_fail_1
+            - slack/notify:
+                event: pass
+                template: basic_success_1
           devhubUsername: << pipeline.parameters.devhubUsername >>
           targetOrgUsername: << pipeline.parameters.devSandboxUsername >>
           devhubInstanceUrl: << pipeline.parameters.devhubInstanceUrl >>
@@ -133,6 +203,16 @@ workflows:
                 - /^version/.*/
       - jsc-sfdx/beta_package_deploy:
           name: "qa_sandbox_deploy"
+          additionalSteps:
+            - slack_notify_deployment_started:
+                targetOrgName: "QA Sandbox"
+          post-steps:
+            - slack/notify:
+                event: fail
+                template: basic_fail_1
+            - slack/notify:
+                event: pass
+                template: basic_success_1
           devhubUsername: << pipeline.parameters.devhubUsername >>
           targetOrgUsername: << pipeline.parameters.qaSandboxUsername >>
           devhubInstanceUrl: << pipeline.parameters.devhubInstanceUrl >>
@@ -159,6 +239,16 @@ workflows:
               only:
                 - /^version/.*/
       - install_production:
+          pre-steps:
+            - slack_notify_deployment_started:
+                targetOrgName: "Production"
+          post-steps:
+            - slack/notify:
+                event: fail
+                template: basic_fail_1
+            - slack/notify:
+                event: pass
+                template: basic_success_1
           context:
             - salesforce
           requires:

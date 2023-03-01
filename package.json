@@ -1,8 +1,5 @@
 {
   "name": "your-package-name",
-  "version": "1.0.0",
-  "description": "Your package description",
-  "main": "index.js",
   "scripts": {
     "prettier:format": "./node_modules/.bin/prettier --write '**/*'",
     "prettier:format:apex": "./node_modules/.bin/prettier --write '**/*.{trigger,cls,apex}'",

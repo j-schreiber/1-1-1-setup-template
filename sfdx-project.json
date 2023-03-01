@@ -29,10 +29,12 @@
   ],
   "namespace": "",
   "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "48.0",
+  "sourceApiVersion": "56.0",
   "packageAliases": {
-    "First Dependency": "0HoXXXXXXXXXXXX",
-    "Second Dependency": "0HoXXXXXXXXXXXX",
-    "Package Name": "0HoXXXXXXXXXXXX"
+    "First Dependency": "0HoXXXXXXXXXXXXXXX",
+    "Second Dependency": "0HoXXXXXXXXXXXXXXX",
+    "Package Name": "0HoXXXXXXXXXXXXXXX",
+    "First Dependency Package Version": "04tXXXXXXXXXXXXXXX",
+    "Second Dependency Package Version": "04tXXXXXXXXXXXXXXX"
   }
 }

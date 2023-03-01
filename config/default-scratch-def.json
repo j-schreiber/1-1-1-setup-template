@@ -1,24 +1,27 @@
 {
-  "orgName": "Lietzau Consulting",
-  "edition": "Enterprise",
+  "orgName": "JS Consulting",
+  "edition": "Developer",
   "features": ["StateAndCountryPicklist", "MultiCurrency", "PersonAccounts"],
   "country": "DE",
   "language": "en_US",
   "settings": {
-    "lightningExperienceSettings": {
-      "enableS1DesktopEnabled": true
+    "languageSettings": {
+      "enableTranslationWorkbench": true
     },
     "pathAssistantSettings": {
       "pathAssistantEnabled": true
     },
-    "languageSettings": {
-      "enableTranslationWorkbench": true
-    },
-    "chatterSettings": {
-      "enableChatter": true
-    },
     "quoteSettings": {
       "enableQuote": true
+    },
+    "enhancedNotesSettings": {
+      "enableEnhancedNotes": true
+    },
+    "apexSettings": {
+      "enableApexApprovalLockUnlock": true
+    },
+    "customAddressFieldSettings": {
+      "enableCustomAddressField": true
     }
   }
 }

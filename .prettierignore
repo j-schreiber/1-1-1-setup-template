@@ -3,6 +3,7 @@
 #
 
 .sfdx
+.sf
 .localdevserver
 .*ignore
 *.*-meta.xml

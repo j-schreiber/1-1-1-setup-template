@@ -1,9 +1,14 @@
 {
   "name": "your-package-name",
   "scripts": {
-    "prettier:format": "./node_modules/.bin/prettier --write '**/*'",
+    "test:lwc:unit": "sfdx-lwc-jest",
+    "test:lwc:unit:watch": "sfdx-lwc-jest --watch",
+    "test:lwc:unit:debug": "sfdx-lwc-jest --debug",
+    "test:lwc:unit:ci": "sfdx-lwc-jest -- --reporters=jest-junit",
+    "prettier:check:ci": "./node_modules/.bin/prettier --check .",
+    "prettier:format": "./node_modules/.bin/prettier --write .",
     "prettier:format:apex": "./node_modules/.bin/prettier --write '**/*.{trigger,cls,apex}'",
-    "prettier:format:json": "./node_modules/.bin/prettier --write '**/*.{json,yaml,yml}'",
+    "prettier:format:json": "./node_modules/.bin/prettier --write '**/*.{json,yml,yaml}'",
     "prettier:format:visualforce": "./node_modules/.bin/prettier --write '**/*.{cmp,page,component}'",
     "prettier:format:lwc": "./node_modules/.bin/prettier --write '**/lwc/**/*.{html,js}'"
   },

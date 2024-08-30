@@ -1,8 +1,8 @@
 {
-  "orgName": "JS Consulting",
+  "orgName": "JS Consulting (NA)",
   "edition": "Enterprise",
   "features": ["StateAndCountryPicklist", "MultiCurrency", "PersonAccounts"],
-  "country": "DE",
+  "country": "US",
   "language": "en_US",
   "settings": {
     "languageSettings": {

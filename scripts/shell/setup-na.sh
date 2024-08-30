@@ -2,9 +2,9 @@
 # shellcheck disable=SC1091
 set -e
 
-alias='YourScratchOrgAlias'
+alias='NaYourScratchOrgAlias'
 duration=7
-configFile='config/default-scratch-def.json'
+configFile='config/na-scratch-def.json'
 devhubusername=
 
 while getopts a:d:f:v: option; do

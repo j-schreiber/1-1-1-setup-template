@@ -1,25 +1,26 @@
 version: 2.1
 
 orbs:
-  jsc-sfdx: jsc/salesforce@1
+  jsc-sfdx: jsc/salesforce@2
   slack: circleci/slack@4
 
 parameters:
   devhubUsername:
     description: Production username for the DevHub org (production environment)
     type: string
-    default: production-username@your-domain.com
+    default: admin-salesforce@mobilityhouse.com
   devhubInstanceUrl:
     description: Production instance URL
     type: string
+    default: https://mobilityhouse.my.salesforce.com
   devSandboxUsername:
     description: Username for the Dev Sandbox (developer integration)
     type: string
-    default: dev-username@your-domain.com
+    default: admin-salesforce@mobilityhouse.com.dev
   qaSandboxUsername:
     description: Username for the QA sandbox (UAT environment)
     type: string
-    default: staging-username@your-domain.com
+    default: admin-salesforce@mobilityhouse.com.staging
 
 commands:
   slack_notify_deployment_started:
@@ -78,66 +79,11 @@ commands:
             }
           event: always
 
-jobs:
-  install_production:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - checkout
-      - jsc-sfdx/install
-      - jsc-sfdx/auth:
-          username: << pipeline.parameters.devhubUsername >>
-          instanceUrl: << pipeline.parameters.devhubInstanceUrl >>
-          jwtKey: SFDX_JWT_KEY
-          consumerKey: SFDX_CONSUMER_KEY
-          setDefault: true
-      - jsc-sfdx/auth:
-          instanceUrl: https://test.salesforce.com
-          username: << pipeline.parameters.devSandboxUsername >>
-          jwtKey: SFDX_JWT_KEY
-          consumerKey: SFDX_CONSUMER_KEY_DEV
-      - jsc-sfdx/auth:
-          instanceUrl: https://test.salesforce.com
-          username: << pipeline.parameters.qaSandboxUsername >>
-          jwtKey: SFDX_JWT_KEY
-          consumerKey: SFDX_CONSUMER_KEY_STAGING
-      - jsc-sfdx/package-get-installed:
-          targetOrg: << pipeline.parameters.devhubUsername >>
-          devhubUsername: << pipeline.parameters.devhubUsername >>
-      - jsc-sfdx/package-get-latest-build:
-          releaseCandidateOnly: true
-          packageVersionExport: LATEST_RELEASE_CANDIDATE_BUILD
-          devhubUsername: << pipeline.parameters.devhubUsername >>
-      - jsc-sfdx/package-install:
-          installLatestBuild: false
-          packageVersion: LATEST_RELEASE_CANDIDATE_BUILD
-          targetOrg: << pipeline.parameters.devSandboxUsername >>
-      - jsc-sfdx/package-install:
-          installLatestBuild: false
-          packageVersion: LATEST_RELEASE_CANDIDATE_BUILD
-          targetOrg: << pipeline.parameters.qaSandboxUsername >>
-      - jsc-sfdx/package-promote:
-          promoteLatestBuild: false
-          packageVersionId: LATEST_RELEASE_CANDIDATE_BUILD
-          devhubUsername: << pipeline.parameters.devhubUsername >>
-      - jsc-sfdx/package-install:
-          installLatestBuild: false
-          packageVersion: LATEST_RELEASE_CANDIDATE_BUILD
-          targetOrg: << pipeline.parameters.devhubUsername >>
-      - jsc-sfdx/run-test-suites:
-          targetOrg: << pipeline.parameters.devhubUsername >>
-          outputDir: test-results/apex
-      - jsc-sfdx/package-rollback:
-          packageVersion: INSTALLED_PACKAGE_VERSION_ID
-          targetOrg: << pipeline.parameters.devhubUsername >>
-          when: on_fail
-      - store_test_results:
-          path: test-results
-
 workflows:
   package_build:
     jobs:
       - jsc-sfdx/scratch_org_test:
+          name: "standard_scratch_org_test"
           additionalSteps:
             - slack_notify_deployment_started:
                 targetOrgName: "Scratch Org"
@@ -150,6 +96,26 @@ workflows:
           runLwcTests: false
           context:
             - salesforce
+            - salesforce_package_installation_keys
+      - jsc-sfdx/scratch_org_test:
+          name: "na_scratch_org_test"
+          additionalSteps:
+            - slack_notify_deployment_started:
+                targetOrgName: "NA Scratch Org"
+          devhubUsername: << pipeline.parameters.devhubUsername >>
+          devhubInstanceUrl: << pipeline.parameters.devhubInstanceUrl >>
+          jwtKey: SFDX_JWT_KEY
+          consumerKey: SFDX_CONSUMER_KEY
+          setupScript: scripts/shell/setup-na.sh
+          runPrettier: false
+          runLwcTests: false
+          context:
+            - salesforce
+            - salesforce_package_installation_keys
+          filters:
+            branches:
+              only:
+                - /^version/.*/
       - jsc-sfdx/build_release_candidate_version:
           devhubUsername: << pipeline.parameters.devhubUsername >>
           devhubInstanceUrl: << pipeline.parameters.devhubInstanceUrl >>
@@ -183,16 +149,14 @@ workflows:
           targetOrgConsumerKey: SFDX_CONSUMER_KEY_DEV
           package: PACKAGE_ID
           requires:
-            - jsc-sfdx/scratch_org_test
+            - standard_scratch_org_test
+            - na_scratch_org_test
           context:
             - salesforce
           filters:
             branches:
               only:
                 - /^version/.*/
-                - /^feature/.*/
-                - /^bugfix/.*/
-                - /^refactor/.*/
       - approve_qa:
           type: approval
           requires:
@@ -238,17 +202,13 @@ workflows:
             branches:
               only:
                 - /^version/.*/
-      - install_production:
-          pre-steps:
-            - slack_notify_deployment_started:
-                targetOrgName: "Production"
-          post-steps:
-            - slack/notify:
-                event: fail
-                template: basic_fail_1
-            - slack/notify:
-                event: pass
-                template: basic_success_1
+      - jsc-sfdx/promote_latest_package_build:
+          name: promote_release_candidate
+          devhubUsername: << pipeline.parameters.devhubUsername >>
+          devhubInstanceUrl: << pipeline.parameters.devhubInstanceUrl >>
+          devhubJwtKey: SFDX_JWT_KEY
+          devhubConsumerKey: SFDX_CONSUMER_KEY
+          packageId: PACKAGE_ID
           context:
             - salesforce
           requires:

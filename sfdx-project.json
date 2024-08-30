@@ -5,10 +5,6 @@
       "default": true
     },
     {
-      "path": "src/unpackaged",
-      "default": false
-    },
-    {
       "path": "src/packaged",
       "package": "Your Package Name",
       "definitionFile": "config/default-scratch-def.json",
@@ -25,15 +21,19 @@
           "versionNumber": "1.0.0.LATEST"
         }
       ]
+    },
+    {
+      "path": "src/unpackaged",
+      "default": false
     }
   ],
   "namespace": "",
   "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "56.0",
+  "sourceApiVersion": "61.0",
   "packageAliases": {
+    "Package Name": "0HoXXXXXXXXXXXXXXX",
     "First Dependency": "0HoXXXXXXXXXXXXXXX",
     "Second Dependency": "0HoXXXXXXXXXXXXXXX",
-    "Package Name": "0HoXXXXXXXXXXXXXXX",
     "First Dependency Package Version": "04tXXXXXXXXXXXXXXX",
     "Second Dependency Package Version": "04tXXXXXXXXXXXXXXX"
   }

@@ -31,8 +31,8 @@ if [ -z "$INSTALLATION_KEY_ONE" ] || [ -z "$INSTALLATION_KEY_TWO" ]; then
     exit 1
 fi
 
-echo "sf package install -p \"FIRST Dependency Package Version\" -u $targetOrg -w 10 -k $INSTALLATION_KEY_ONE"
-sf package install -p "FIRST Dependency Package Version" -u "$targetOrg" -w 10 -k "$INSTALLATION_KEY_ONE"
+echo "sf package install -p \"FIRST Dependency Package Version\" -o $targetOrg -w 10 -k $INSTALLATION_KEY_ONE --json"
+sf package install -p "FIRST Dependency Package Version" -o "$targetOrg" -w 10 -k "$INSTALLATION_KEY_ONE" --json
 
-echo "sf package install -p \"SECOND Dependency Package Version\" -u $targetOrg -w 10 -k $INSTALLATION_KEY_TWO"
-sf package install -p "SECOND Dependency Package Version" -u "$targetOrg" -w 10 -k "$INSTALLATION_KEY_TWO"
+echo "sf package install -p \"SECOND Dependency Package Version\" -o $targetOrg -w 10 -k $INSTALLATION_KEY_TWO --json"
+sf package install -p "SECOND Dependency Package Version" -o "$targetOrg" -w 10 -k "$INSTALLATION_KEY_TWO" --json

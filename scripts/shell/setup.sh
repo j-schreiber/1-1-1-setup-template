@@ -21,11 +21,11 @@ echo "Installing node dependencies ..."
 npm ci
 
 if [ -z "$devhubusername" ]; then
-    echo "sf org create scratch -d $duration -f $configFile -a $alias -s"
-    sf org create scratch -d "$duration" -f "$configFile" -a "$alias" -s
+    echo "sf org create scratch -y $duration -f $configFile -a $alias -d --json"
+    sf org create scratch -y "$duration" -f "$configFile" -a "$alias" -d --json
 else
-    echo "sf org create scratch -v $devhubusername -d $duration -f $configFile -a $alias -s"
-    sf org create scratch -v "$devhubusername" -d "$duration" -f "$configFile" -a "$alias" -s
+    echo "sf org create scratch -v $devhubusername -y $duration -f $configFile -a $alias -d --json"
+    sf org create scratch -v "$devhubusername" -y "$duration" -f "$configFile" -a "$alias" -d --json
 fi
 
 echo "Installing dependencies on $alias..."

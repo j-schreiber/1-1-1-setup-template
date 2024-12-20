@@ -3,7 +3,7 @@
     {
       "attributes": {
         "type": "CurrencyType",
-        "referenceId": "ref1"
+        "referenceId": "CHF"
       },
       "IsoCode": "CHF",
       "DecimalPlaces": 2,
@@ -14,7 +14,7 @@
     {
       "attributes": {
         "type": "CurrencyType",
-        "referenceId": "ref2"
+        "referenceId": "USD"
       },
       "IsoCode": "USD",
       "DecimalPlaces": 2,

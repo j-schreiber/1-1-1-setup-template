@@ -4,9 +4,9 @@ set -e
 
 targetOrg='YourScratchOrgAlias'
 
-while getopts u: option; do
+while getopts o: option; do
     case "${option}" in
-    u) targetOrg=${OPTARG} ;;
+    o) targetOrg=${OPTARG} ;;
     *) ;;
     esac
 done

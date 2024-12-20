@@ -17,6 +17,14 @@ while getopts a:d:f:v: option; do
     esac
 done
 
+echo "===================================================="
+echo "Running Scratch Org Setup with the these properties:"
+echo "Devhub: $devhubusername"
+echo "Config: $configFile"
+echo "Duration: $duration"
+echo "Alias: $alias"
+echo "===================================================="
+
 echo "Installing node dependencies ..."
 npm ci
 
@@ -29,13 +37,16 @@ else
 fi
 
 echo "Installing dependencies on $alias..."
-bash scripts/shell/dependency-install.sh -u "$alias"
+bash scripts/shell/dependency-install.sh -o "$alias"
 
-echo "sf project deploy start -u $alias"
-sf project deploy start -u "$alias"
+echo "sf project deploy start -o $alias"
+sf project deploy start -o "$alias"
 
-echo "sf data import tree -p data/plans/standard-plan.json -u $alias"
-sf data import tree -p data/plans/standard-plan.json -u "$alias"
+echo "sf data import tree -p data/plans/standard-plan.json -o $alias"
+sf data import tree -p data/plans/standard-plan.json -o "$alias"
 
-echo "sf org open -u $alias -p \"/lightning/setup/SetupOneHome/home\""
-sf org open -u "$alias" -p "/lightning/setup/SetupOneHome/home"
+echo "Generating login link for debugging..."
+sf org open -o "$alias" -r
+
+echo "sf org open -o $alias -p \"/lightning/setup/SetupOneHome/home\""
+sf org open -o "$alias" -p "/lightning/setup/SetupOneHome/home"

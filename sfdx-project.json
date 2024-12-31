@@ -36,5 +36,8 @@
     "Second Dependency": "0HoXXXXXXXXXXXXXXX",
     "First Dependency Package Version": "04tXXXXXXXXXXXXXXX",
     "Second Dependency Package Version": "04tXXXXXXXXXXXXXXX"
-  }
+  },
+  "sourceBehaviorOptions": [
+    "decomposeCustomLabelsBeta2"
+  ]
 }

@@ -2,7 +2,7 @@
 # shellcheck disable=SC1091
 set -e
 
-alias='YourScratchOrgAlias'
+alias=
 duration=7
 configFile='config/default-scratch-def.json'
 devhubusername=
@@ -17,13 +17,13 @@ while getopts a:d:f:v: option; do
     esac
 done
 
-echo "===================================================="
-echo "Running Scratch Org Setup with the these properties:"
+echo "============================================"
+echo "Creating Scratch Org with these properties:"
 echo "Devhub: $devhubusername"
 echo "Config: $configFile"
 echo "Duration: $duration"
 echo "Alias: $alias"
-echo "===================================================="
+echo "============================================"
 
 echo "Installing node dependencies ..."
 npm ci
@@ -42,10 +42,16 @@ bash scripts/shell/dependency-install.sh -o "$alias"
 echo "sf project deploy start -o $alias"
 sf project deploy start -o "$alias"
 
+# echo "sf project deploy start  -d src/unpackaged-deploy -o $alias"
+# sf project deploy start -d src/unpackaged-deploy -o "$alias"
+
+# echo "sf org assign permset -n Package_Full_Access_Perm_Set -o $alias"
+# sf org assign permset -n Package_Full_Access_Perm_Set -o "$alias"
+
 echo "sf data import tree -p data/plans/standard-plan.json -o $alias"
 sf data import tree -p data/plans/standard-plan.json -o "$alias"
 
-echo "Generating login link for debugging..."
+echo "Generating login link for debugging"
 sf org open -o "$alias" -r
 
 echo "sf org open -o $alias -p \"/lightning/setup/SetupOneHome/home\""

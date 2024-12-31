@@ -91,7 +91,7 @@ workflows:
           devhubInstanceUrl: << pipeline.parameters.devhubInstanceUrl >>
           jwtKey: SFDX_JWT_KEY
           consumerKey: SFDX_CONSUMER_KEY
-          setupScript: scripts/shell/setup.sh
+          setupScript: scripts/shell/setup-eu.sh
           runPrettier: true
           runLwcTests: false
           context:

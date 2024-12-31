@@ -2,9 +2,9 @@
 # shellcheck disable=SC1091
 set -e
 
-alias='Scratch_Alias_NA'
+alias='Scratch_Alias_EU'
 duration=7
-configFile='config/na-scratch-def.json'
+configFile='config/default-scratch-def.json'
 
 while getopts a:d: option; do
     case "${option}" in
@@ -15,3 +15,6 @@ while getopts a:d: option; do
 done
 
 ./scripts/shell/setup.sh -a "$alias" -d "$duration" -f "$configFile"
+
+echo "sf data import tree -f data/currency-types.json -o $alias"
+sf data import tree -f data/currency-types.json -o "$alias"
